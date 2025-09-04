@@ -1,4 +1,4 @@
-﻿namespace ApiCatalogo.Repositories
+﻿namespace ApiCatalogo.Repositories.Interfaces
 {
     public interface IUnitOfWork
     {

@@ -1,5 +1,6 @@
 ﻿using APICatalago.Context;
 using APICatalago.Models;
+using ApiCatalogo.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

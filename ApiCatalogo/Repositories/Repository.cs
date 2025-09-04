@@ -1,4 +1,5 @@
 ﻿using APICatalago.Context;
+using ApiCatalogo.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

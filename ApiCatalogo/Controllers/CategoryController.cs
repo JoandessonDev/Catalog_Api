@@ -1,7 +1,7 @@
 ﻿using APICatalago.Context;
 using APICatalago.Models;
 using ApiCatalogo.Filters;
-using ApiCatalogo.Repositories;
+using ApiCatalogo.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 namespace ApiCatalogo.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

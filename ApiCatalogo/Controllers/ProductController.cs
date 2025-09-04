@@ -1,6 +1,6 @@
 ﻿using APICatalago.Context;
 using APICatalago.Models;
-using ApiCatalogo.Repositories;
+using ApiCatalogo.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -9,21 +9,24 @@ using System.Linq;
 namespace ApiCatalogo.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ProductController> _logger;
+        private readonly ISchemaRepository _schemaRepository;
 
-        public ProductController(IUnitOfWork unitOfWork, ILogger<ProductController> logger)
+        public ProductController(IUnitOfWork unitOfWork, ILogger<ProductController> logger, ISchemaRepository schemaRepository)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _schemaRepository = schemaRepository;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> Get()
         {
+            var schemaInfo = _schemaRepository.GetSchemaAsync();
             var products = _unitOfWork.ProdutoRepository.GetAll();
             if (products is null || !products.Any())
             {

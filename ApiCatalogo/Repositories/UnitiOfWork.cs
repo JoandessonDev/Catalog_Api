@@ -1,4 +1,5 @@
 ﻿using APICatalago.Context;
+using ApiCatalogo.Repositories.Interfaces;
 using System.Reflection.Metadata.Ecma335;
 
 namespace ApiCatalogo.Repositories
