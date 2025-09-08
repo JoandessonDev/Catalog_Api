@@ -23,7 +23,7 @@ namespace ApiCatalogo.Controllers
         }
 
 
-       [HttpPost("send")]
+        [HttpPost("send")]
         public async Task<IActionResult> Send([FromBody] string questionRequest)
         {
             if (string.IsNullOrWhiteSpace(questionRequest))
@@ -36,20 +36,38 @@ namespace ApiCatalogo.Controllers
             string modelReply = okResult.Value as string ?? string.Empty;
             string sqlQuery = AiSqlHelper.CleanSqlFromModel(modelReply);
 
-            // Segurança: permitir apenas SELECT
-            var forbiddenCommands = new[] { "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "CREATE", "TRUNCATE", "EXEC" };
-            var upperSql = sqlQuery.ToUpperInvariant();
+            if (!IsSafeSelectQuery(sqlQuery))
+                return BadRequest("Query não permitida. Só aceitamos SELECTs de leitura simples.");
 
-            if (!upperSql.TrimStart().StartsWith("SELECT"))
-                return BadRequest("A query precisa ser um SELECT.");
-
-            if (forbiddenCommands.Any(cmd => upperSql.Contains(cmd)))
-                return BadRequest("A query contém operações não permitidas. Apenas SELECT é permitido.");
-
-            // Executa a query de forma dinâmica
             var dados = await _sqlQueryExecutor.ExecuteQueryAsync(sqlQuery);
 
             return Ok(dados);
+        }
+
+        private bool IsSafeSelectQuery(string sql)
+        {
+            if (string.IsNullOrWhiteSpace(sql))
+                return false;
+
+            string noComments = Regex.Replace(sql, @"(--.*?$)|(/\*.*?\*/)", "", RegexOptions.Singleline | RegexOptions.Multiline);
+            noComments = noComments.Trim();
+            if (string.IsNullOrEmpty(noComments))
+                return false;
+
+            var parts = noComments.Split(';').Select(p => p.Trim()).Where(p => !string.IsNullOrEmpty(p)).ToArray();
+            if (parts.Length != 1)
+                return false;
+
+            string statement = parts[0];
+
+            if (!Regex.IsMatch(statement, @"^\s*(SELECT|WITH)\b", RegexOptions.IgnoreCase))
+                return false;
+
+            var forbiddenPattern = @"\b(INSERT|UPDATE|DELETE|DROP|TRUNCATE|ALTER|CREATE|GRANT|REVOKE|MERGE|EXEC|EXECUTE|CALL|ATTACH|DETACH|INTO|REPLACE|UPSERT)\b";
+            if (Regex.IsMatch(noComments, forbiddenPattern, RegexOptions.IgnoreCase))
+                return false;
+
+            return true;
         }
 
 

@@ -93,7 +93,7 @@ namespace ApiCatalogo.Services.AiServices
                 DataBase=CatalogDB
                 Cliente: Id, Nome, Email, Telefone, Endereco, DataCadastro
                 Venda: Id, ClienteId, DataVenda, Total, Status
-                VendaItem: Id, VendaId, ProdutoId, PrecoUnitario, Quantidade, SubTotal [Na consulta colocar vendaItems]
+                VendaItem: Id, VendaId, ProdutoId, PrecoUnitario, Quantidade, SubTotal 
                 Produto: Id, Nome, Descricao, Preco, ImageUrl, Estoque, DataCadastro, CategoriaId
                 Categoria: Id, Nome, ImageUrl
 
@@ -126,6 +126,7 @@ namespace ApiCatalogo.Services.AiServices
 
 
                 Regras:
+                - sempre que alguma consulta retornar numeros com casas decimais, ponha as casas em 2 caracteres a não ser que eu tenha pedido por uma quantidade diferente.
                 - Retorne apenas a query SQL, sem JSON, sem explicação, sem comentários.
                 - Use apenas tabelas e colunas do esquema informado.
                 - Inclua SELECT com colunas específicas, nunca use SELECT *.
