@@ -14,19 +14,17 @@ namespace ApiCatalogo.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ProductController> _logger;
-        private readonly ISchemaRepository _schemaRepository;
 
-        public ProductController(IUnitOfWork unitOfWork, ILogger<ProductController> logger, ISchemaRepository schemaRepository)
+
+        public ProductController(IUnitOfWork unitOfWork, ILogger<ProductController> logger)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _schemaRepository = schemaRepository;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> Get()
         {
-            var schemaInfo = _schemaRepository.GetSchemaAsync();
             var products = _unitOfWork.ProdutoRepository.GetAll();
             if (products is null || !products.Any())
             {

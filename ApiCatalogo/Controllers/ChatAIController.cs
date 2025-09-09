@@ -1,8 +1,11 @@
 ﻿using APICatalago.Models;
 using ApiCatalogo.Helpers;
-using ApiCatalogo.Services;
 using ApiCatalogo.Services.AiServices;
-using ApiCatalogo.Services.Interfaces;
+using ApiCatalogo.Services.AiServices.AiServices.DTOs;
+using ApiCatalogo.Services.AiServices.Enums;
+using ApiCatalogo.Services.AiServices.Helpers;
+using ApiCatalogo.Services.AiServices.Interfaces;
+using ApiCatalogo.Services.AiServices.ModelsPrompt;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -24,52 +27,43 @@ namespace ApiCatalogo.Controllers
 
 
         [HttpPost("send")]
-        public async Task<IActionResult> Send([FromBody] string questionRequest)
+        public async Task<IActionResult> Send([FromBody] QuestionRequestDTO questionRequest)
         {
-            if (string.IsNullOrWhiteSpace(questionRequest))
+            if (string.IsNullOrWhiteSpace(questionRequest.MessageUser))
                 return BadRequest("Question é obrigatória.");
 
-            var result = await __aiService.Send(questionRequest);
-            if (result is not OkObjectResult okResult)
-                return BadRequest("Não foi possível processar a solicitação.");
+            if (questionRequest.ModePrompt == ModePrompt.Sql)
+            {
+                __aiService.SetPromptGenerator(new SqlPrompt());
+                var result = await __aiService.Send(questionRequest);
+                if (result is not OkObjectResult okResult)
+                    return BadRequest("Não foi possível processar a solicitação.");
 
-            string modelReply = okResult.Value as string ?? string.Empty;
-            string sqlQuery = AiSqlHelper.CleanSqlFromModel(modelReply);
+                string modelReply = okResult.Value as string ?? string.Empty;
+                string sqlQuery = AiSqlHelper.CleanSqlFromModel(modelReply);
 
-            if (!IsSafeSelectQuery(sqlQuery))
-                return BadRequest("Query não permitida. Só aceitamos SELECTs de leitura simples.");
+                if (!AiSqlHelper.IsSafeSelectQuery(sqlQuery))
+                    return BadRequest("Query não permitida. Só aceitamos SELECTs de leitura simples.");
 
-            var dados = await _sqlQueryExecutor.ExecuteQueryAsync(sqlQuery);
+                var dados = await _sqlQueryExecutor.ExecuteQueryAsync(sqlQuery);
+                return Ok(dados);
+            }
+            else if (questionRequest.ModePrompt == ModePrompt.HtmlDashBoard)
+            {
+                __aiService.SetPromptGenerator(new HtmlDashboardPrompt());
+                var htmlResult = await __aiService.Send(questionRequest);
 
-            return Ok(dados);
+                if (htmlResult is not OkObjectResult htmlOkResult)
+                    return BadRequest("Não foi possível processar a solicitação.");
+
+                string html = htmlOkResult.Value as string ?? string.Empty;
+                return Content(html, "text/html");
+            }
+            else
+            {
+                return BadRequest("ModePrompt inválido.");
+            }
         }
-
-        private bool IsSafeSelectQuery(string sql)
-        {
-            if (string.IsNullOrWhiteSpace(sql))
-                return false;
-
-            string noComments = Regex.Replace(sql, @"(--.*?$)|(/\*.*?\*/)", "", RegexOptions.Singleline | RegexOptions.Multiline);
-            noComments = noComments.Trim();
-            if (string.IsNullOrEmpty(noComments))
-                return false;
-
-            var parts = noComments.Split(';').Select(p => p.Trim()).Where(p => !string.IsNullOrEmpty(p)).ToArray();
-            if (parts.Length != 1)
-                return false;
-
-            string statement = parts[0];
-
-            if (!Regex.IsMatch(statement, @"^\s*(SELECT|WITH)\b", RegexOptions.IgnoreCase))
-                return false;
-
-            var forbiddenPattern = @"\b(INSERT|UPDATE|DELETE|DROP|TRUNCATE|ALTER|CREATE|GRANT|REVOKE|MERGE|EXEC|EXECUTE|CALL|ATTACH|DETACH|INTO|REPLACE|UPSERT)\b";
-            if (Regex.IsMatch(noComments, forbiddenPattern, RegexOptions.IgnoreCase))
-                return false;
-
-            return true;
-        }
-
 
     }
 }

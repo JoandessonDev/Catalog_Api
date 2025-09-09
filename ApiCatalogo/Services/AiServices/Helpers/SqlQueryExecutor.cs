@@ -23,7 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using System.Dynamic;
 
-namespace ApiCatalogo.Services
+namespace ApiCatalogo.Services.AiServices.Helpers
 {
     public class SqlQueryExecutor
     {
