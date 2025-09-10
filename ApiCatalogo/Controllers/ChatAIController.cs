@@ -50,7 +50,7 @@ namespace ApiCatalogo.Controllers
             }
             else if (questionRequest.ModePrompt == ModePrompt.HtmlDashBoard)
             {
-                __aiService.SetPromptGenerator(new HtmlDashboardPrompt());
+                __aiService.SetPromptGenerator(new HtmlDashboardPrompt()); 
                 var htmlResult = await __aiService.Send(questionRequest);
 
                 if (htmlResult is not OkObjectResult htmlOkResult)

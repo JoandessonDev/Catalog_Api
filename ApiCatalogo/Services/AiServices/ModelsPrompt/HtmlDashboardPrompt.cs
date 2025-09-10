@@ -35,7 +35,7 @@ namespace ApiCatalogo.Services.AiServices.ModelsPrompt
                    - Para eixos com muitos labels, habilitar `ticks.autoSkip = true` e `ticks.maxRotation = 0`.
                    - Use `scales.y.beginAtZero = true` quando for gráfico de quantidade/valor.
                 7. Acessibilidade & estilo:
-                   - Use tags semânticas (header, main, section, footer).
+                   - Use tags semânticas (header, main, section, nada de footer).
                    - Cada gráfico deve ter `aria-label` e `<h3>` com título.
                 8. Dados dinâmicos embutidos:
                    - Insira os dados a serem usados em um elemento `<script id=\""dashboard-data\"" type=\""application/json\""> ... </script>` contendo o JSON (use o conteúdo de entrada acima convertido para JSON quando for apropriado).
