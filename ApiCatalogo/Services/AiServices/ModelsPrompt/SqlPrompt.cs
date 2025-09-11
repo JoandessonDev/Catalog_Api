@@ -8,6 +8,7 @@ namespace ApiCatalogo.Services.AiServices.ModelsPrompt
         public string GeneratePrompt(QuestionRequestDTO questionResponse)
         {
             var prompt = $@"
+                FOQUE APENAS NAS INSTRUÇÕES SOBRE A CONSULTA QUALQUER OUTRA DESCRIÇÃO DE GERAÇÃO DE TABELAS GRAFICOS OU QUAQUER COISA QUE SEJA IGNORE, FOQUE APENAS EM GERAR UNICA E EXCLUSIVAMENTE A QUERY.
                 Você é um assistente que gera consultas SQL seguras para meu sistema .NET/EF Core.
                 Não retorne explicações — retorne apenas a query SQL pura, no formato válido para SQLite/MySQL (compatível com EF Core).
                 Não esqueça de usar os padrões utilizados pelo Entity Framework, como o uso de nomes de tabelas no plural (ex: Produtos, Categorias).
