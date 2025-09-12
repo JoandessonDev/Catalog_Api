@@ -15,7 +15,7 @@ namespace ApiCatalogo.Services.AiServices.ModelsPrompt
                  
                 IMPORTANTE SE VC RECEBEU UM DADO COMO SE EU TIVESSE DADO UM SELECT 1 NA MINHA BASE EXIBA UMA MENSAGEM DE ERRO. SE O DADO QUE CHEGOU A VC FOI UM 1. Só que não diga nada a respeito disso apenas diga que não é possivel atender a esta solicitação NUNCA DIGA  coisas do tipo Os dados fornecidos são equivalentes a um SELECT 1 em uma base de dados, o que não é um formato válido para processamento ou exibição.. 
                 iSE VC NÃO RECEBER NENHUM DADO ANALISE UNICAMENTE A MENSAGEM DO USUÁRIO OU MOSTRE UM HTML DIZENDO QUE NÃO FOI POSSIVEL ATENDER A ESTA SOLICITAÇÃO. OU GERE ALGUMA MENSAGEM DE ERRO TBM
-
+                não coloque paragrafos ou textos proximos a tabela na tabela no maximo um unico titulo em cima da tabela nada mais.
                 GERE APENAS UM ARQUIVO HTML COMPLETO (inicie com <!doctype html> e termine com </html>). 
                 como base nos dados fornecidos me mostreem forma de TABELA HTML os dados fornecidos.
                 sÓ GERE UM DASHBOARD SE EU PEDIR EXPRESSAMENTE NA PERGUNTA. CASO CONTRÁRIO, APENAS UMA TABELA HTML.
@@ -54,9 +54,14 @@ namespace ApiCatalogo.Services.AiServices.ModelsPrompt
                 11. Não incluir:
                    - Não inclua chamadas a APIs externas além do CDN do Chart.js.
                    - Não inclua bibliotecas CSS/JS extras (Bootstrap, jQuery etc.) a menos que estritamente necessário — PRIORIZE HTML/CSS/JS puro + Chart.js.
-
-                Lembre-se: o arquivo de saída deve ser **APENAS** o documento HTML completo, pronto para salvar como .html e abrir no navegador. Nada fora do HTML.
+                12- se for gerar uma tabela apenas use essa formatação aqui
+                body{{font-family:Arial,sans-serif;margin:20px;background-color:#f4f4f4;color:#333}}h1{{color:#333;text-align:center;margin-bottom:30px}}
+                table{{width:90%;margin:0 auto;border-collapse:collapse;box-shadow:0 2px 10px rgba(0,0,0,0.1);background-color:#fff;caption-side:top}}th,td{{padding:12px 15px;text-align:left;border-bottom:1px solid #ddd}}
+                th{{background-color:#5F59B5;color:#fff;font-weight:bold}}tr:nth-child(even){{background-color:#f9f9f9}}tr:hover{{background-color:#f1f1f1}}@media(max-width:768px){{table{{width:100%}}th,td{{padding:8px 10px}}}}
                 
+                13 - Use as cores acima pra construir titulos e headers porem quando for gerar graficos use cores diferentes coloridas pra representar melhor a diferença entre os dados.
+                14- ao montar um dashboard nunca coloque uma tabela em msm linha que graficos sempre um em baixo do outro
+                Lembre-se: o arquivo de saída deve ser **APENAS** o documento HTML completo, pronto para salvar como .html e abrir no navegador. Nada fora do HTML.
             ";
             return prompt;
         }
