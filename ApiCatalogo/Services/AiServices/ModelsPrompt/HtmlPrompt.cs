@@ -13,7 +13,7 @@ namespace ApiCatalogo.Services.AiServices.ModelsPrompt
                 Use exatamente o conteúdo abaixo como os dados PARA EXIBIR O QUE FOR SOLICIDATO:
                     {data}  
                  
-                IMPORTANTE SE VC RECEBEU UM DADO COMO SE EU TIVESSE DADO UM SELECT 1 NA MINHA BASE EXIBA UMA MENSAGEM DE ERRO. SE O DADO QUE CHEGOU A VC FOI UM 1. Só que não diga nada a respeito disso apenas diga que não é possivel atender a esta solicitação NUNCA DIGA  coisas do tipo Os dados fornecidos são equivalentes a um SELECT 1 em uma base de dados, o que não é um formato válido para processamento ou exibição.. 
+                IMPORTANTE SE VC RECEBEU UM DADO COMO SE EU TIVESSE DADO UM SELECT 1 NA MINHA BASE EXIBA UMA MENSAGEM DE ERRO. SE O DADO QUE CHEGOU A VC FOI UM 1. Só que não diga nada a respeito disso apenas diga que Falha ao processar a solicitação. NUNCA DIGA  coisas do tipo Os dados fornecidos são equivalentes a um SELECT 1 em uma base de dados, o que não é um formato válido para processamento ou exibição.. 
                 iSE VC NÃO RECEBER NENHUM DADO ANALISE UNICAMENTE A MENSAGEM DO USUÁRIO OU MOSTRE UM HTML DIZENDO QUE NÃO FOI POSSIVEL ATENDER A ESTA SOLICITAÇÃO. OU GERE ALGUMA MENSAGEM DE ERRO TBM
                 não coloque paragrafos ou textos proximos a tabela na tabela no maximo um unico titulo em cima da tabela nada mais.
                 GERE APENAS UM ARQUIVO HTML COMPLETO (inicie com <!doctype html> e termine com </html>). 

@@ -16,7 +16,6 @@ namespace ApiCatalogo.Controllers
     [Route("api/[controller]")]
     public class ChatAIController : ControllerBase
     {
-        private readonly string _apiKey = "AIzaSyDikJ4VfagbGchH97lJPGUucnOBO0yeGpo";
         private readonly IAiService __aiService;
         private readonly SqlQueryExecutor _sqlQueryExecutor;
         public ChatAIController(IAiService aiService, SqlQueryExecutor sqlQueryExecutor)
@@ -32,6 +31,7 @@ namespace ApiCatalogo.Controllers
             if (string.IsNullOrWhiteSpace(questionRequest.MessageUser))
                 return BadRequest("Question é obrigatória.");
 
+            
             if (questionRequest.ModePrompt == ModePrompt.Sql)
             {
                 __aiService.SetPromptGenerator(new SqlPrompt());
@@ -54,7 +54,7 @@ namespace ApiCatalogo.Controllers
                 var htmlResult = await __aiService.Send(questionRequest);
 
                 if (htmlResult is not OkObjectResult htmlOkResult)
-                    return BadRequest("Não foi possível processar a solicitação.");
+                    return BadRequest("Falha ao processar a solicitação.");
 
                 string html = htmlOkResult.Value as string ?? string.Empty;
                 return Content(html, "text/html");
